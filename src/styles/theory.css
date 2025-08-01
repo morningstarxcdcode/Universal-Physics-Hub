@@ -1,0 +1,340 @@
+/* Theory styles section */
+:root {
+  --theory-bg: rgba(255,255,255,0.04);
+  --theory-muted: rgba(255,255,255,0.65);
+  --theory-accent: #00e6e6;
+  --theory-success: rgba(22,193,114,0.18);
+  --theory-warning: rgba(244,180,0,0.22);
+  --theory-info: rgba(46,168,255,0.20);
+  --theory-note-bg: rgba(255,240,140,0.24);
+  --theory-copied-msg: #8f8;
+  --theory-copied-msg-border: rgba(0,0,0,0.2);
+  --theory-border-subtle: rgba(255,255,255,0.08);
+  --theory-code-bg: rgba(255,255,255,0.06);
+  --radius: 8px;
+}
+
+[data-theme='light'] {
+    --theory-bg: rgba(17,17,17,0.03);
+    --theory-muted: rgba(17,17,17,0.62);
+    --theory-success: rgba(22,193,114,0.18);
+    --theory-warning: rgba(244,180,0,0.22);
+    --theory-info: rgba(46,168,255,0.20);
+    --theory-note-bg: rgba(255,240,140,0.24);
+    --theory-copied-msg-border: rgba(0,0,0,0.08);
+    --theory-border-subtle: rgba(17,17,17,0.06);
+    --theory-code-bg: rgba(0,0,0,0.04);
+}
+
+/* Container e titoli */
+.theory-container {
+  margin: 2rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--theory-border-subtle);
+}
+
+.theory-section + .theory-section {
+  margin-top: 1.5rem;
+}
+
+.theory-title {
+  font-size: 1.25rem;
+  margin: 0 0 .75rem;
+  color: var(--theory-accent);
+}
+
+.theory-subheading {
+  font-size: 1.1rem;
+  margin: 1rem 0 .25rem;
+  color: var(--theory-muted);
+}
+
+.theory-paragraph {
+  line-height: 1.7;
+  margin: .5rem 0;
+  color: var(--theory-muted);
+}
+
+.theory-blocks > :not(:last-child) {
+  margin-bottom: .75rem;
+}
+
+/* Formula */
+.theory-formula {
+  position: relative;
+  margin: .75rem 0;
+  padding: .75rem 1rem;
+  border-radius: var(--radius);
+  background: var(--theory-bg);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.theory-formula .copy-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: none;
+  border: none;
+  padding: .4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: .85;
+  transition: opacity .2s ease;
+}
+
+.theory-formula .copy-btn:hover {
+  opacity: 1;
+}
+
+.theory-formula .formula-code,
+.theory-formula code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size: .95rem;
+  color: var(--text-color);
+}
+
+/* Copy feedback (se vuoi ancora usare uno span) */
+.copied-msg {
+  position: absolute;
+  bottom: 4px;
+  left: 8px;
+  font-size: 0.75rem;
+  color: var(--theory-copied-msg);
+  border: 1px solid var(--theory-copied-msg-border);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Note e liste */
+.theory-note {
+  margin: .75rem 0;
+  padding: .6rem .85rem;
+  background: var(--theory-note-bg);
+  border-left: 3px solid rgba(255,255,0,0.6);
+  border-radius: 6px;
+  color: var(--text-color);
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.theory-list {
+  margin: .5rem 1.25rem;
+  padding-left: 1rem;
+  color: var(--theory-muted);
+}
+
+.theory-list li {
+  margin: .35rem 0;
+}
+
+/* Code block esteso */
+.theory-codeblock {
+  border-radius: 10px;
+  padding: .5rem;
+  background: var(--theory-code-bg);
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.code-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 .25rem;
+  margin-bottom: .35rem;
+}
+
+.code-lang {
+  font-size: .75rem;
+  opacity: .8;
+  color: var(--text-subtle);
+}
+
+.code-content {
+  display: block;
+  padding: .65rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size: .9rem;
+  white-space: pre;
+  overflow: auto;
+}
+
+/* Callout / avvisi */
+.theory-callout {
+  display: flex;
+  gap: .75rem;
+  padding: .65rem;
+  border-radius: 8px;
+  background: var(--theory-bg);
+  align-items: flex-start;
+}
+
+.callout-icon {
+  flex: 0 0 36px;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+}
+
+.callout-body { flex: 1; }
+
+.callout-title {
+  font-weight: 600;
+  margin-bottom: .25rem;
+  color: var(--text-color);
+}
+
+.callout-content { color: var(--theory-muted); }
+
+.callout-info {
+  border-left: 4px solid var(--info-border);
+  background: var(--info-bg);
+}
+
+.callout-warning {
+  border-left: 4px solid var(--warning-border);
+  background: var(--warning-bg);
+}
+
+.callout-tip {
+  border-left: 4px solid var(--secondary-accent);
+  background: var(--neutral-bg);
+}
+
+.callout-success {
+  border-left: 4px solid var(--success-border);
+  background: var(--success-bg);
+}
+
+/* Example */
+.theory-example {
+  border: 1px dashed var(--theory-border-subtle);
+  padding: .65rem;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.example-title {
+  font-weight: 600;
+  margin-bottom: .4rem;
+  color: var(--text-color);
+}
+
+.example-body { color: var(--theory-muted); }
+
+/* Tabelle */
+.theory-table-wrap {
+  overflow: auto;
+  border-radius: 8px;
+  margin: .75rem 0;
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.theory-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--theory-muted);
+}
+
+.theory-table th {
+  text-align: left;
+  padding: .5rem;
+  background: var(--theory-bg);
+  font-size: .85rem;
+  color: var(--text-color);
+}
+
+.theory-table td {
+  padding: .6rem;
+  border-top: 1px solid var(--theory-border-subtle);
+}
+
+/* Immagini */
+.theory-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.theory-image figcaption {
+  font-size: .85rem;
+  opacity: .8;
+  margin-top: .35rem;
+  color: var(--text-subtle);
+}
+
+/* Toggle/accordion */
+.theory-toggle {
+  border-radius: 8px;
+  background: var(--theory-bg);
+  overflow: hidden;
+  border: 1px solid var(--theory-border-subtle);
+}
+
+.toggle-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .6rem;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text-color);
+}
+
+.toggle-panel {
+  transition: max-height .25s ease, padding .25s;
+  overflow: hidden;
+  padding: 0 .6rem 0;
+}
+
+.theory-toggle.open .toggle-panel {
+  padding: .6rem;
+}
+
+/* Accessibilità e utilità */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Bottoni copia generici */
+.copy-btn {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-size: 0.95rem;
+  opacity: 0.8;
+  color: var(--text-muted);
+}
+
+.copy-btn:hover { 
+    opacity: 1; 
+    color: var(--text-color);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .theory-container {
+    margin: 1rem;
+    padding: .75rem;
+  }
+  .theory-title { font-size: 1.1rem; }
+}
