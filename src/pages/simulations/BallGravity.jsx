@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback
-} from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import p5 from "p5";
 
 import TopSim from "../../components/TopSim.jsx";
@@ -13,6 +8,85 @@ import SelectInput from "../../components/inputs/SelectInput.jsx";
 import TheoryRenderer from "../../components/theory/TheoryRenderer";
 import chapters from "../../data/chapters.js";
 import { useLocation } from "react-router-dom";
+
+// Ball physics helpers (no classes, minimal nesting)
+function makeBallState(p, dimsRef, cfg) {
+  return {
+    cfg: { ...cfg },
+    mass: cfg.mass,
+    pos: p.createVector(dimsRef.current.w / 2, cfg.size / 2),
+    vel: p.createVector(0, 0),
+    acc: p.createVector(0, 0),
+  };
+}
+
+function setBallConfig(ball, cfg) {
+  ball.cfg = { ...cfg };
+  ball.mass = cfg.mass;
+}
+
+function applyForce(ball, f) {
+  const force = f.copy().div(ball.mass);
+  ball.acc.add(force);
+}
+
+function updateBall(p, dimsRef, ball) {
+  const { size, color } = ball.cfg;
+  ball.vel.add(ball.acc);
+  ball.pos.add(ball.vel);
+  ball.acc.mult(0);
+  p.stroke(0);
+  p.strokeWeight(2);
+  p.fill(p.color(color));
+  p.ellipse(ball.pos.x, ball.pos.y, size);
+  if (ball.pos.x < 0 || ball.pos.x > dimsRef.current.w) {
+    ball.vel.x *= -1;
+    ball.pos.x = p.constrain(ball.pos.x, 0, dimsRef.current.w);
+  }
+  if (ball.pos.y > dimsRef.current.h) {
+    ball.vel.y *= -1;
+    ball.pos.y = dimsRef.current.h;
+  }
+}
+
+function resetBall(p, dimsRef, ball) {
+  const { size } = ball.cfg;
+  ball.pos = p.createVector(dimsRef.current.w / 2, size / 2);
+  ball.vel.mult(0);
+  ball.acc.mult(0);
+}
+
+// Factory for the p5 sketch to minimize nested functions.
+function gravitySketch(p, canvasParent, configRef, bgColor, dimsRef, setIsBlowing) {
+  let ball;
+  p.setup = () => {
+    dimsRef.current.w = canvasParent.current.clientWidth;
+    dimsRef.current.h = canvasParent.current.clientHeight;
+    p.createCanvas(dimsRef.current.w, dimsRef.current.h).parent(canvasParent.current);
+    const style = getComputedStyle(canvasParent.current);
+    const rgb = (style.backgroundColor.match(/\d+/g) || []).map(Number);
+    bgColor.current = rgb.length === 3 ? rgb : [0, 0, 0];
+    ball = makeBallState(p, dimsRef, configRef.current);
+  };
+  p.draw = () => {
+    const { gravity, wind } = configRef.current;
+    setBallConfig(ball, configRef.current);
+    p.background(...bgColor.current);
+    applyForce(ball, p.createVector(0, gravity));
+    if (p.mouseIsPressed) {
+      applyForce(ball, p.createVector(wind, 0));
+    }
+    updateBall(p, dimsRef, ball);
+  };
+  p.mousePressed = () => setIsBlowing(true);
+  p.mouseReleased = () => setIsBlowing(false);
+  p.windowResized = () => {
+    dimsRef.current.w = canvasParent.current.clientWidth;
+    dimsRef.current.h = canvasParent.current.clientHeight;
+    p.resizeCanvas(dimsRef.current.w, dimsRef.current.h);
+    resetBall(p, dimsRef, ball);
+  };
+}
 
 export function BallGravity() {
   const location = useLocation();
@@ -30,102 +104,15 @@ export function BallGravity() {
 
   const canvasParent = useRef(null);
   const p5Instance   = useRef(null);
+  const dimsRef = useRef({ w: 0, h: 0 });
 
   const bgColor = useRef([0, 0, 0]);
 
   useEffect(() => {
-    const sketch = p => {
-      let w, h, ball;
-
-      class Ball {
-        constructor(cfg) {
-          const { size, mass } = cfg;
-          this.cfg         = { ...cfg };
-          this.mass        = mass;
-          this.pos         = p.createVector(w / 2, size / 2);
-          this.vel         = p.createVector(0, 0);
-          this.acc         = p.createVector(0, 0);
-        }
-        applyForce(f) {
-          const force = f.copy().div(this.mass);
-          this.acc.add(force);
-        }
-        update() {
-          const { size, color } = this.cfg;
-          this.vel.add(this.acc);
-          this.pos.add(this.vel);
-          this.acc.mult(0);
-
-          p.stroke(0);
-          p.strokeWeight(2);
-          p.fill(p.color(color));
-          p.ellipse(this.pos.x, this.pos.y, size);
-
-          if (this.pos.x < 0 || this.pos.x > w) {
-            this.vel.x *= -1;
-            this.pos.x = p.constrain(this.pos.x, 0, w);
-          }
-          if (this.pos.y > h) {
-            this.vel.y *= -1;
-            this.pos.y = h;
-          }
-        }
-        reset(newW, newH) {
-          w = newW; h = newH;
-          const { size } = this.cfg;
-          this.pos = p.createVector(w / 2, size / 2);
-          this.vel.mult(0);
-          this.acc.mult(0);
-        }
-        setConfig(cfg) {
-          this.cfg = { ...cfg };
-          this.mass = cfg.mass;
-        }
-      }
-
-      p.setup = () => {
-        w = canvasParent.current.clientWidth;
-        h = canvasParent.current.clientHeight;
-        p.createCanvas(w, h).parent(canvasParent.current);
-
-        const style = getComputedStyle(canvasParent.current);
-        const rgb = (style.backgroundColor.match(/\d+/g) || []).map(Number);
-        bgColor.current = rgb.length === 3 ? rgb : [0, 0, 0];
-
-        ball = new Ball(configRef.current);
-      };
-
-      p.draw = () => {
-        const { gravity, wind } = configRef.current;
-        ball.setConfig(configRef.current);
-
-        p.background(...bgColor.current);
-
-        ball.applyForce(p.createVector(0, gravity));
-
-        if (p.mouseIsPressed) {
-          ball.applyForce(p.createVector(wind, 0));
-        }
-
-        ball.update();
-      };
-
-      // NEW: sincronizza isBlowing con eventi mouse
-      p.mousePressed = () => setIsBlowing(true);
-      p.mouseReleased = () => setIsBlowing(false);
-
-      p.windowResized = () => {
-        const newW = canvasParent.current.clientWidth;
-        const newH = canvasParent.current.clientHeight;
-        p.resizeCanvas(newW, newH);
-        ball.reset(newW, newH);
-      };
-    };
-
-    p5Instance.current = new p5(sketch, canvasParent.current);
+  p5Instance.current = new p5((p) => gravitySketch(p, canvasParent, configRef, bgColor, dimsRef, setIsBlowing), canvasParent.current);
 
     return () => {
-      p5Instance.current.remove();
+  p5Instance.current.remove();
     };
   }, []);
 

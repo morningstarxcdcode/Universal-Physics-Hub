@@ -30,6 +30,20 @@ export function CenterOfMass() {
     setCfg(s => ({ ...s, [name]: val }));
   };
 
+  const drawBackground = (p) => {
+    const screenEl = document.querySelector('.screen');
+    const bg = window.getComputedStyle(screenEl).backgroundColor.match(/\d+/g)?.map(Number) || [0,0,0];
+    const { showTrails } = cfgRef.current;
+    if (!showTrails) p.background(...bg); else { p.noStroke(); p.fill(bg[0],bg[1],bg[2],60); p.rect(0,0,p.width,p.height);}  
+  };
+
+  const computeCOM = (p, arr) => {
+    let M = 0, cx = 0, cy = 0;
+    for (const b of arr) { M += b.m; cx += b.m*b.x; cy += b.m*b.y; }
+    if (M === 0) return { x: p.width/2, y: p.height/2 };
+    return { x: cx/M, y: cy/M };
+  };
+
   const Sketch = useCallback((p) => {
     let dragging = -1, r = 12;
 
@@ -44,30 +58,11 @@ export function CenterOfMass() {
       setMasses(arr);
     };
 
-    function drawBackground() {
-      const screenEl = document.querySelector('.screen');
-      const bg = window.getComputedStyle(screenEl).backgroundColor.match(/\d+/g)?.map(Number) || [0,0,0];
-      const { showTrails } = cfgRef.current;
-      if (!showTrails) p.background(...bg); else { p.noStroke(); p.fill(bg[0],bg[1],bg[2],60); p.rect(0,0,p.width,p.height);}  
-    }
-
-    function com(arr) {
-      let M = 0, cx = 0, cy = 0;
-      for (const b of arr) { M += b.m; cx += b.m*b.x; cy += b.m*b.y; }
-      if (M === 0) return { x: p.width/2, y: p.height/2 };
-      return { x: cx/M, y: cy/M };
-    }
-
-    function updateDraggingPosition(idx) {
-      setMasses(prev => prev.map((b, i) => (i === idx ? { ...b, x: p.mouseX, y: p.mouseY } : b)));
-    }
-
     p.draw = () => {
-      drawBackground();
+      drawBackground(p);
       const { color } = cfgRef.current;
       const arr = massesRef.current;
 
-      // draw masses
       p.noStroke();
       for (const b of arr) {
         p.fill(color);
@@ -76,8 +71,7 @@ export function CenterOfMass() {
         p.text(b.m.toString(), b.x, b.y);
       }
 
-      // draw center of mass
-      const C = com(arr);
+      const C = computeCOM(p, arr);
       p.stroke(255, 160, 0); p.strokeWeight(2);
       p.line(C.x-15, C.y, C.x+15, C.y); p.line(C.x, C.y-15, C.x, C.y+15);
     };
@@ -94,7 +88,14 @@ export function CenterOfMass() {
     };
 
     p.mouseDragged = () => {
-      if (dragging >= 0) updateDraggingPosition(dragging);
+      if (dragging >= 0) {
+        const arr = massesRef.current;
+        const updated = new Array(arr.length);
+        for (let i = 0; i < arr.length; i++) {
+          updated[i] = i === dragging ? { ...arr[i], x: p.mouseX, y: p.mouseY } : arr[i];
+        }
+        setMasses(updated);
+      }
     };
 
     p.mouseReleased = () => { dragging = -1; };

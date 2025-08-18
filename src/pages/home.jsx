@@ -1,5 +1,5 @@
 // src/pages/home.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Header from "../components/Header.jsx";
 import BackgroundFX from "../components/BackgroundFX.jsx";
 import Footer from "../components/Footer.jsx";
@@ -24,7 +24,7 @@ export function Home() {
 
   return (
     <>
-      <Header onSearch={setSearchTerm} />
+  <Header onSearch={setSearchTerm} />
   <BackgroundFX variant="particles" />
       <main className="cosmic-particles">
         {useReveal()}

@@ -12,13 +12,31 @@ export function DampedOscillator() {
   const location = useLocation();
   const [cfg, setCfg] = useState({ m: 1, k: 0.05, c: 0.01, F0: 0.2, omega: 0.05, x0: 60, color: "#7f7f7f", trail: true });
   const cfgRef = useRef(cfg); useEffect(()=>{cfgRef.current=cfg;},[cfg]);
-  const handle = (name)=>(e)=>{ let v; if(name==="trail") v=e.target.checked; else if(name==="color") v=e.target.value; else v=Number(e.target.value); setCfg(s=>({...s,[name]:v})); };
+  const handle = (name) => (e) => {
+    let v;
+    if (name === "trail") {
+      v = e.target.checked;
+    } else if (name === "color") {
+      v = e.target.value;
+    } else {
+      v = Number(e.target.value);
+    }
+    setCfg(s => ({ ...s, [name]: v }));
+  };
   const Sketch = useCallback((p)=>{
     let x, v, a, t, cy;
     p.setup=()=>{const {clientWidth:w,clientHeight:h}=p._userNode;p.createCanvas(w,h); x=cfgRef.current.x0; v=0; a=0; t=0; cy=p.height/2; };
     p.draw=()=>{
-      const se=document.querySelector('.screen'); const bg=window.getComputedStyle(se).backgroundColor.match(/\d+/g)?.map(Number)||[0,0,0];
-      const { m,k,c,F0,omega,color,trail } = cfgRef.current; if(!trail) p.background(...bg); else {p.noStroke(); p.fill(bg[0],bg[1],bg[2],50); p.rect(0,0,p.width,p.height);} 
+      const se=document.querySelector('.screen');
+      const bg=window.getComputedStyle(se).backgroundColor.match(/\d+/g)?.map(Number)||[0,0,0];
+      const { m,k,c,F0,omega,color,trail } = cfgRef.current;
+      if (!trail) {
+        p.background(...bg);
+      } else {
+        p.noStroke();
+        p.fill(bg[0],bg[1],bg[2],50);
+        p.rect(0,0,p.width,p.height);
+      }
       // equation: m x'' + c x' + k x = F0 cos(omega t)
       const drive = F0 * Math.cos(t);
       a = (drive - c*v - k*x)/m; v += a; x += v; t += omega;

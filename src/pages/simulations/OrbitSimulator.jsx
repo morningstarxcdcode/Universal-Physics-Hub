@@ -12,7 +12,17 @@ export function OrbitSimulator() {
   const location = useLocation();
   const [cfg, setCfg] = useState({ mu: 0.5, r0: 160, v0: 2.2, color: "#7f7f7f", trail: true });
   const cfgRef = useRef(cfg); useEffect(()=>{cfgRef.current=cfg;},[cfg]);
-  const handle = (n)=>(e)=>{const v=n==="trail"? e.target.checked : (n==="color"? e.target.value : Number(e.target.value)); setCfg(s=>({...s,[n]:v}));};
+  const handle = (name) => (e) => {
+    let v;
+    if (name === "trail") {
+      v = e.target.checked;
+    } else if (name === "color") {
+      v = e.target.value;
+    } else {
+      v = Number(e.target.value);
+    }
+    setCfg(s => ({ ...s, [name]: v }));
+  };
   const Sketch = useCallback((p)=>{
   let pos, vel;
     p.setup=()=>{const {clientWidth:w,clientHeight:h}=p._userNode;p.createCanvas(w,h); reset();};

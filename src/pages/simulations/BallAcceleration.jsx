@@ -29,39 +29,33 @@ export function BallAcceleration() {
     let ball;
     let w, h;
 
-    class Ball {
-      constructor() {
-        this.resetPosition();
-        this.velocity = p.createVector();
-        this.acceleration = p.createVector();
-      }
-
-      resetPosition() {
-        this.position = p.createVector(w / 2, h / 2);
-      }
-
-      update() {
-        const { maxspeed, size, acceleration, color } = inputsRef.current;
-        let mouse = p.createVector(p.mouseX, p.mouseY);
-        let dir = mouse.sub(this.position);
-        dir.setMag(acceleration);
-        this.acceleration = dir;
-        this.velocity.add(this.acceleration);
-        this.velocity.limit(maxspeed);
-        this.position.add(this.velocity);
-
-        p.stroke(0);
-        p.strokeWeight(2);
-        p.fill(p.color(color));
-        p.circle(this.position.x, this.position.y, size);
-      }
-    }
+    const createBall = () => {
+      let position = p.createVector(w / 2, h / 2);
+      let velocity = p.createVector();
+      let accel = p.createVector();
+      return {
+        reset() {
+          position = p.createVector(w / 2, h / 2);
+        },
+        update() {
+          const { maxspeed, size, acceleration, color } = inputsRef.current;
+          const dir = p.createVector(p.mouseX, p.mouseY).sub(position).setMag(acceleration);
+          accel = dir;
+          velocity.add(accel).limit(maxspeed);
+          position.add(velocity);
+          p.stroke(0);
+          p.strokeWeight(2);
+          p.fill(p.color(color));
+          p.circle(position.x, position.y, size);
+        }
+      };
+    };
 
     p.setup = () => {
       w = p._userNode.clientWidth;
       h = p._userNode.clientHeight;
       p.createCanvas(w, h);
-      ball = new Ball();
+  ball = createBall();
     };
 
     p.draw = () => {
@@ -80,7 +74,7 @@ export function BallAcceleration() {
       w = p._userNode.clientWidth;
       h = p._userNode.clientHeight;
       p.resizeCanvas(w, h);
-      ball.resetPosition();
+  ball.reset();
     };
   }, []);
 
