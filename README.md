@@ -38,10 +38,32 @@ Clone the project locally or try the web app on the original site: https://morni
     # or
     yarn install
     ```
-6. Start the local development server <br>
+4. Start the local development server <br>
    ```bash
    npm run dev
-7. Open your browser to http://localhost:3000 or http://localhost:5173/
+5. Open your browser to http://localhost:3000 or http://localhost:5173/
+
+---
+
+**6. Temporary Sharing (while running locally):**
+
+If you don’t want to deploy yet, you can easily tunnel your localhost so others can access your running app:
+
+- **Install ngrok (free):**
+  ```bash
+  brew install ngrok/ngrok/ngrok
+  ```
+- **Start ngrok to tunnel your dev server (default Vite port is 5174):**
+  ```bash
+  ngrok http 5174
+  ```
+- ngrok will provide you with a link like:
+  ```
+  https://randomstring.ngrok.io
+  ```
+- Share this link with others; they can open your local server temporarily in their browsers.
+
+
 
 <br>
 <hr>
@@ -50,15 +72,10 @@ Clone the project locally or try the web app on the original site: https://morni
 
 <table>
    <tr>
-      <td align="center">
-         <img src="./public/Icon.png" width="96" height="96" style="border-radius:50%" alt="morningstarxcdcode" />
-         <br />
-         <a href="https://github.com/morningstarxcdcode">morningstarxcdcode</a>
-      </td>
-      <td align="center">
+       <td align="center">
          <img src="./screenshots/Contributors/Screenshot 2025-08-18 at 10.59.50 AM.png" width="160" alt="Contributors screenshot" />
          <br />
-         <span>Community Contributors</span>
+         <a href="https://github.com/morningstarxcdcode">morningstarxcdcode</a>
       </td>
    </tr>
 </table>
@@ -69,14 +86,9 @@ Clone the project locally or try the web app on the original site: https://morni
 <table>
    <tr>
       <td align="center">
-         <img src="./public/Logo.png" width="200" alt="Robotics" />
-         <br />
-         <a href="https://github.com/MStarRobotics">Robotics</a>
-      </td>
-      <td align="center">
          <img src="./screenshots/Supporters/Screenshot 2025-08-18 at 10.53.26 AM.png" width="200" alt="Supporters screenshot" />
          <br />
-         <span>Supporters</span>
+         <a href="https://github.com/MStarRobotics">Robotics</a>
       </td>
    </tr>
 </table>
