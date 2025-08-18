@@ -41,7 +41,7 @@ Clone the project locally or try the web app on the original site: https://morni
 4. Start the local development server <br>
    ```bash
    npm run dev
-5. Open your browser to http://localhost:3000 or http://localhost:5173/
+5. Open your browser to  http://localhost:5174/
 
 ---
 
