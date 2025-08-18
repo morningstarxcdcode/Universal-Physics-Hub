@@ -7,6 +7,15 @@
       <img src="https://img.shields.io/github/forks/morningstarxcdcode/Universal-Physics-Hub" alt="Forks">
       <img src="https://img.shields.io/github/stars/morningstarxcdcode/Universal-Physics-Hub" alt="Stars">
       <img src="https://img.shields.io/github/repo-size/morningstarxcdcode/Universal-Physics-Hub" alt="Repository Size">
+         <a href="https://github.com/morningstarxcdcode/Universal-Physics-Hub/actions/workflows/gh-pages.yml">
+            <img src="https://github.com/morningstarxcdcode/Universal-Physics-Hub/actions/workflows/gh-pages.yml/badge.svg?branch=main" alt="Deploy to GitHub Pages" />
+         </a>
+         <a href="https://morningstarxcdcode.github.io/Universal-Physics-Hub/">
+            <img src="https://img.shields.io/website?url=https%3A%2F%2Fmorningstarxcdcode.github.io%2FUniversal-Physics-Hub%2F&label=website&up_message=online&down_message=offline" alt="Website status" />
+         </a>
+         <img src="https://img.shields.io/badge/build-Vite-646CFF?logo=vite&logoColor=white" alt="Vite" />
+         <img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" alt="React" />
+         <img src="https://img.shields.io/badge/p5.js-ED225D?logo=p5.js&logoColor=white" alt="p5.js" />
    </p>
 </div>
 
