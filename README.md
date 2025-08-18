@@ -85,8 +85,6 @@ If you don’t want to deploy yet, you can easily tunnel your localhost so other
 
 - Share this link with others; they can open your local server temporarily in their browsers.
 
-
-
 ---
 
 ### Contributors
@@ -94,7 +92,6 @@ If you don’t want to deploy yet, you can easily tunnel your localhost so other
 | Contributor | Preview |
 | --- | --- |
 | [@morningstarxcdcode](https://github.com/morningstarxcdcode) | ![Contributors screenshot](./screenshots/Contributors/Screenshot%202025-08-18%20at%2010.59.50%E2%80%AFAM.png) |
-
 
 ### Supporters
 
@@ -115,7 +112,6 @@ See `src/data/chapters.js` for implemented topics and open an issue for the rest
 ### Performance
 
 Route‑level code splitting (React.lazy + Suspense) reduces initial bundle size. Rollup may still warn about large chunks depending on what’s preloaded—informational only. Further tuning can split rarely used utilities into separate chunks.
-
 
 ### License
 
