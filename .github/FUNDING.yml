@@ -1,1 +1,16 @@
-ko_fi:
+## Add funding links for the repository. Supported providers include (but are not limited to):
+## github, patreon, ko_fi, open_collective, liberapay, buymeacoffee, tidelift, opencollective
+## Example usage:
+## github: your-github-username
+## patreon: your-patreon-name
+## ko_fi: your-ko-fi-username
+## open_collective: your-organisation
+
+# Link to GitHub Sponsors account (will enable the Sponsor button on the repo if the account is eligible)
+github: morningstarxcdcode
+
+# Uncomment and fill any of the following if you use the respective services
+#patreon: your-patreon-name
+#ko_fi: your-ko-fi-username
+#open_collective: your-open-collective-slug
+#buymeacoffee: your-bmc-username
